@@ -66,12 +66,10 @@ class HashTable:
                 else:
                     self.buckets[bucket_index] = item.next
                 self.item_count -= 1
+                self.check_shrink()
                 return True
             prev = item
             item = item.next
-        # 縮小処理したい
-        # 30%以下になったら縮小する
-        # checkする関数を呼ぶ
         return False
 
     def size(self):
@@ -84,6 +82,10 @@ class HashTable:
     def check_usage(self):
         if self.item_count >= self.bucket_size * 0.7:
             self.resize()
+
+    def check_shrink(self):
+        if self.item_count <= self.bucket_size * 0.3:
+            self.shrink()
 
     def resize(self):
         new_size = self.bucket_size * 2
@@ -98,6 +100,18 @@ class HashTable:
         self.bucket_size = new_size
         self.buckets = new_buckets
 
+    def shrink(self):
+        new_size = self.bucket_size // 2
+        new_buckets = [None] * new_size
+        for bucket in self.buckets:
+            item = bucket
+            while item:
+                bucket_index = calculate_hash(item.key) % new_size
+                new_item = Item(item.key, item.value, new_buckets[bucket_index])
+                new_buckets[bucket_index] = new_item
+                item = item.next
+        self.bucket_size = new_size
+        self.buckets = new_buckets
 
 # Test the functional behavior of the hash table.
 def functional_test():
