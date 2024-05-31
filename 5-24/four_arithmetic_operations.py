@@ -33,14 +33,6 @@ def read_division(line, index):
     token = {'type': 'DIVISION'}
     return token, index + 1
 
-def read_left_parenthesis(line, index):
-    token = {'type': 'LEFT_PARENTHESIS'}
-    return token, index + 1
-
-def read_right_parenthesis(line, index):
-    token = {'type': 'RIGHT_PARENTHESIS'}
-    return token, index + 1
-
 
 def tokenize(line):
     tokens = []
@@ -56,10 +48,6 @@ def tokenize(line):
             (token, index) = read_multiplication(line, index)
         elif line[index] == '/':
             (token, index) = read_division(line, index)
-        elif line[index] == '(':
-            (token, index) = read_left_parenthesis(line, index)
-        elif line[index] == ')':
-            (token, index) = read_right_parenthesis(line, index)
         elif line[index].isspace():
             index += 1
             continue
